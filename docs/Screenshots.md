@@ -63,7 +63,7 @@ The system generates analytical visualizations from prediction data.
 
 
 
-# Overall Architecture Flow
+# Overall Gaussianity 
 
 ![Overall Workflow](https://github.com/user-attachments/assets/b65dd3f7-f3a3-4522-b3de-5a4e457c6064)
 
