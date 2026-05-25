@@ -24,7 +24,7 @@ Add project screenshots in `docs/screenshots/` and update the links below.
 
 | Page / View | Screenshot Path |
 |-------------|-----------------|
-| Home | `docs/screenshots/home.png` |
+| Home | ![Home Page](https://github.com/user-attachments/assets/563054fb-406b-465a-ab0d-aebbb16fd3fe) |
 | Dashboard | `docs/screenshots/dashboard.png` |
 | Upload | `docs/screenshots/upload.png` |
 | Demo | `docs/screenshots/demo.png` |
