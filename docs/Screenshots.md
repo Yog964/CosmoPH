@@ -1,4 +1,4 @@
-# Textile Defect Analysis System Workflow
+System Workflow
 
 ---
 
