@@ -147,7 +147,7 @@ docker-compose up --build
 ## Main Workflow
 
 1. Open the frontend in the browser.
-2. Upload a FITS file or select a sample dataset.
+2. Upload a FITS file or select a sample dataset.(https://irsa.ipac.caltech.edu/data/Planck/release_3/)
 3. Configure preprocessing options.
 4. Generate a clean CMB patch.
 5. Run TDA computation.
