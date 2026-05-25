@@ -20,7 +20,6 @@ The project is designed for students, researchers, and educators who want an acc
 
 ## Screenshots
 
-Add project screenshots in `docs/screenshots/` and update the links below.
 
 | Page / View                    | Screenshot Path                                                                                            |
 | ------------------------------ | ---------------------------------------------------------------------------------------------------------- |
@@ -33,12 +32,6 @@ Add project screenshots in `docs/screenshots/` and update the links below.
 | Overall Gaussianity / Workflow | ![Overall Workflow](https://github.com/user-attachments/assets/b65dd3f7-f3a3-4522-b3de-5a4e457c6064)       |
 
 
-Example:
-
-```md
-![Dashboard](docs/screenshots/dashboard.png)
-![Results](docs/screenshots/results.png)
-```
 
 ## Tech Stack
 
@@ -53,7 +46,7 @@ Example:
 | Machine Learning | PyTorch, scikit-learn, joblib |
 | Data Processing | NumPy, SciPy |
 | Testing | Pytest, ESLint |
-| Deployment | Docker, Docker Compose |
+
 
 ## Project Structure
 
@@ -211,7 +204,7 @@ npm run lint
 
 ## Notes
 
-- `node_modules/` is ignored and should not be pushed to Git.
+
 - Large generated files such as `.zip`, `.fits`, `.npy`, and `.npz` are ignored.
 - Uploaded files and generated outputs are stored locally during development.
 - The frontend is tracked as normal source code inside this repository.
