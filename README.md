@@ -22,14 +22,16 @@ The project is designed for students, researchers, and educators who want an acc
 
 Add project screenshots in `docs/screenshots/` and update the links below.
 
-| Page / View | Screenshot Path |
-|-------------|-----------------|
-| Home | ![Home Page](https://github.com/user-attachments/assets/563054fb-406b-465a-ab0d-aebbb16fd3fe) |
-| Dashboard | `docs/screenshots/dashboard.png` |
-| Upload | `docs/screenshots/upload.png` |
-| Demo | `docs/screenshots/demo.png` |
-| Results | `docs/screenshots/results.png` |
-| Report | `docs/screenshots/report.png` |
+| Page / View                    | Screenshot Path                                                                                            |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| Home                           | ![Home Page](https://github.com/user-attachments/assets/563054fb-406b-465a-ab0d-aebbb16fd3fe)              |
+| Upload Dataset                 | ![Upload Dataset](https://github.com/user-attachments/assets/e2ca5b52-c6f2-4a04-acae-06f891b2d4ad)         |
+| Results Dashboard              | ![Results Dashboard](https://github.com/user-attachments/assets/4d682974-5dd9-4c67-986e-b5cc5c4bafbf)      |
+| Defect Detection               | ![Defect Detection](https://github.com/user-attachments/assets/eccf79bd-b15a-44cb-8e01-68579a590d52)       |
+| Anomaly Classification         | ![Anomaly Classification](https://github.com/user-attachments/assets/e7b3fc24-24df-4939-90fd-49a780df88ff) |
+| Graphs & Analytics             | ![Graphs & Analytics](https://github.com/user-attachments/assets/6fa211f2-a84e-4062-bc0e-5f7dd97e865a)     |
+| Overall Gaussianity / Workflow | ![Overall Workflow](https://github.com/user-attachments/assets/b65dd3f7-f3a3-4522-b3de-5a4e457c6064)       |
+
 
 Example:
 
