@@ -1,76 +1,57 @@
 # CosmoPH
 
-Topological Data Analysis for Cosmic Microwave Background maps.
+CosmoPH is a full-stack web application for applying Topological Data Analysis (TDA) to Cosmic Microwave Background (CMB) maps. It helps users upload or select CMB data, preprocess maps, compute persistent homology, visualize topological signatures, compare results with Gaussian null models, and classify inflation-model patterns using machine learning.
 
-CosmoPH is a full-stack web platform for exploring primordial non-Gaussianity in Cosmic Microwave Background (CMB) data. It combines FITS upload, preprocessing, persistent homology, null-hypothesis comparison, defect visualization, and inflation-model classification in a browser-based workflow.
+The project is designed for students, researchers, and educators who want an accessible browser-based workflow for exploring primordial non-Gaussianity without manually running a complex Python/TDA pipeline.
 
-## Latest Updates
+## Key Features
 
-- Added the full Next.js frontend source directly into the main repository.
-- Added dashboard, upload, demo, docs, results, and report pages.
-- Added reusable visualization components for CMB heatmaps, persistence diagrams, Betti curves, persistence images, ECC curves, lifespan histograms, null-hypothesis graphs, defect overlays, and export panels.
-- Added robust FITS loading that supports both primary 2D image HDUs and HEALPix-style table HDUs.
-- Added `scripts/generate_fits.py` for generating Gaussian and non-Gaussian sample FITS files.
-- Added a hybrid ML pipeline with a CNN branch for CMB patch pixels and an MLP branch for TDA features.
-- Added classifier model assets and `scripts/train_classifier.py` for training the inflation classifier.
-- Added graceful classifier fallback behavior so backend APIs remain usable even when trained PyTorch weights or local native dependencies are unavailable.
-- Added calibrated TDA thresholds in the comparison engine to reduce false non-Gaussian flags.
-- Added `defect_detector.py` for defect/anomaly overlay support.
-- Updated dependencies for the backend and frontend.
-- Converted `frontend` from a nested Git repo into normal source files tracked by this repository.
-- Kept generated archives and dependency folders out of Git with ignore rules such as `*.zip` and `node_modules/`.
-
-## Features
-
-- Upload FITS files or select bundled/sample datasets.
-- Preview CMB patches and preprocessing output.
-- Configure preprocessing options such as patch size, masking, normalization, and scale settings.
-- Compute persistent homology using TDA services.
-- Visualize H0 and H1 topology through persistence diagrams and Betti curves.
-- Generate persistence images and statistical summaries.
-- Compare samples against Gaussian null hypotheses.
-- Detect topological anomalies and render visual overlays.
-- Run ML-based inflation model classification.
-- Export results, plots, reports, and structured data.
-- Use a demo workflow without requiring a custom upload.
+- FITS file upload and dataset selection for CMB analysis.
+- Interactive preprocessing for CMB patches.
+- Robust FITS loading with support for both 2D image HDUs and HEALPix-style table HDUs.
+- Persistent homology computation for H0 and H1 features.
+- Persistence diagram, Betti curve, persistence image, ECC curve, and lifespan histogram visualizations.
+- Gaussian null-hypothesis comparison using calibrated TDA thresholds.
+- Defect and anomaly detection overlays.
+- Hybrid ML classifier using raw CMB map information and extracted TDA features.
+- Demo workflow for quick testing without custom data.
+- Export-ready result views and report page.
+- Full frontend included in the main repository.
 
 ## Screenshots
 
-Add screenshots to a folder such as `docs/screenshots/` and update these links when ready.
+Add project screenshots in `docs/screenshots/` and update the links below.
 
-| View | Screenshot |
-|------|------------|
-| Home / Landing | `docs/screenshots/home.png` |
+| Page / View | Screenshot Path |
+|-------------|-----------------|
+| Home | `docs/screenshots/home.png` |
 | Dashboard | `docs/screenshots/dashboard.png` |
-| Upload Flow | `docs/screenshots/upload.png` |
-| Demo Run | `docs/screenshots/demo.png` |
-| Results Visualizations | `docs/screenshots/results.png` |
-| Report Export | `docs/screenshots/report.png` |
+| Upload | `docs/screenshots/upload.png` |
+| Demo | `docs/screenshots/demo.png` |
+| Results | `docs/screenshots/results.png` |
+| Report | `docs/screenshots/report.png` |
 
-Suggested Markdown once screenshots are added:
+Example:
 
 ```md
 ![Dashboard](docs/screenshots/dashboard.png)
 ![Results](docs/screenshots/results.png)
 ```
 
-## Architecture
+## Tech Stack
 
-```text
-Browser
-  |
-  v
-Frontend: Next.js + React + Tailwind + Plotly
-  |
-  v
-Backend API: FastAPI + Pydantic + Uvicorn
-  |
-  v
-Services: Astropy/Healpy + Ripser/Persim + PyTorch/sklearn
-  |
-  v
-Local storage: uploads, datasets, outputs, model assets
-```
+| Layer | Technologies |
+|-------|--------------|
+| Frontend | Next.js, React, TypeScript, Tailwind CSS |
+| Visualization | Plotly.js, react-plotly.js |
+| UI Icons | lucide-react |
+| Backend | FastAPI, Pydantic, Uvicorn |
+| Astronomy / FITS | Astropy, Healpy |
+| TDA | Ripser, Persim |
+| Machine Learning | PyTorch, scikit-learn, joblib |
+| Data Processing | NumPy, SciPy |
+| Testing | Pytest, ESLint |
+| Deployment | Docker, Docker Compose |
 
 ## Project Structure
 
@@ -79,7 +60,6 @@ Code1/
 |-- backend/
 |   |-- app/
 |   |   |-- main.py
-|   |   |-- config.py
 |   |   |-- routes/
 |   |   |-- schemas/
 |   |   |-- services/
@@ -103,11 +83,7 @@ Code1/
 |   |-- package.json
 |   `-- Dockerfile
 |-- dataset/
-|-- notebooks/
 |-- scripts/
-|   |-- download_datasets.py
-|   |-- generate_fits.py
-|   `-- train_classifier.py
 |-- uploads/
 |-- docker-compose.yml
 |-- PRD.txt
@@ -115,16 +91,23 @@ Code1/
 `-- README.md
 ```
 
-## Quick Start
+## How To Run
 
 ### Prerequisites
 
-- Python 3.10+
-- Node.js 18+
+- Python 3.10 or newer
+- Node.js 18 or newer
 - npm
 - Git
 
-### Backend
+### 1. Clone The Repository
+
+```bash
+git clone https://github.com/Yog964/CosmoPH.git
+cd CosmoPH
+```
+
+### 2. Run The Backend
 
 ```bash
 cd backend
@@ -134,12 +117,14 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
 
-Backend:
+Backend URLs:
 
 - API: `http://localhost:8000`
-- Docs: `http://localhost:8000/docs`
+- Swagger docs: `http://localhost:8000/docs`
 
-### Frontend
+### 3. Run The Frontend
+
+Open a new terminal:
 
 ```bash
 cd frontend
@@ -147,81 +132,64 @@ npm install
 npm run dev
 ```
 
-Frontend:
+Frontend URL:
 
 - App: `http://localhost:3000`
 
-### Docker
+### 4. Run With Docker
+
+From the project root:
 
 ```bash
 docker-compose up --build
 ```
 
-This starts the backend and frontend using the project Docker configuration.
+## Main Workflow
+
+1. Open the frontend in the browser.
+2. Upload a FITS file or select a sample dataset.
+3. Configure preprocessing options.
+4. Generate a clean CMB patch.
+5. Run TDA computation.
+6. View persistence diagrams, Betti curves, persistence images, and related plots.
+7. Compare the sample against Gaussian null models.
+8. Inspect detected defects or anomalies.
+9. Run the ML classifier.
+10. Export or review the generated report.
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/health` | Backend health check |
+| Method | Endpoint | Purpose |
+|--------|----------|---------|
+| GET | `/health` | Check backend health |
 | GET | `/api/datasets` | List available datasets |
 | POST | `/api/upload` | Upload a FITS file |
-| POST | `/api/preprocess` | Start preprocessing |
-| POST | `/api/compute-tda` | Run TDA computation |
-| GET | `/api/results/{job_id}` | Fetch analysis results |
-| GET | `/api/export/{job_id}` | Download exported results |
-| POST | `/api/demo` | Run the demo pipeline |
+| POST | `/api/preprocess` | Run preprocessing |
+| POST | `/api/compute-tda` | Start TDA computation |
+| GET | `/api/compute-tda/{job_id}` | Check TDA job status |
+| GET | `/api/results/{job_id}` | Fetch result data |
+| GET | `/api/export/{job_id}` | Export result files |
+| POST | `/api/demo` | Run demo analysis |
 
-## Data and Scripts
+## Useful Scripts
 
-### Sample Data
-
-Use the dataset script to generate or prepare local samples:
+Generate or prepare sample datasets:
 
 ```bash
 python scripts/download_datasets.py
 ```
 
-### FITS Generation
-
-Generate sample Gaussian and non-Gaussian FITS files:
+Generate Gaussian and non-Gaussian FITS samples:
 
 ```bash
 python scripts/generate_fits.py
 ```
 
-### Classifier Training
-
-Train or refresh the classifier pipeline:
+Train or refresh the classifier:
 
 ```bash
 python scripts/train_classifier.py
 ```
-
-## Analysis Workflow
-
-1. Select a sample dataset or upload a FITS map.
-2. Configure preprocessing options.
-3. Generate a cleaned 2D CMB patch.
-4. Run persistent homology.
-5. Review persistence diagrams, Betti curves, persistence images, and statistical summaries.
-6. Compare the sample against Gaussian null distributions.
-7. Inspect defect overlays and anomaly summaries.
-8. Run model classification.
-9. Export plots, data, and reports.
-
-## Tech Stack
-
-| Layer | Tools |
-|-------|-------|
-| Frontend | Next.js, React, Tailwind CSS, Plotly.js, lucide-react |
-| Backend | FastAPI, Pydantic, Uvicorn |
-| TDA | Ripser, Persim, scikit-tda style workflow |
-| Astronomy | Astropy, Healpy |
-| ML | PyTorch, scikit-learn, joblib |
-| Data | FITS, NumPy arrays, local outputs |
-| Testing | Pytest, ESLint |
-| Deployment | Docker, Docker Compose |
 
 ## Testing
 
@@ -239,33 +207,12 @@ cd frontend
 npm run lint
 ```
 
-## Git Notes
+## Notes
 
-The frontend is now tracked as normal source code in this repository. Dependency folders and generated files should not be committed.
-
-Ignored examples:
-
-- `node_modules/`
-- `__pycache__/`
-- `.pytest_cache/`
-- `.env`
-- `uploads/`
-- `*.zip`
-- `*.fits`
-- `*.npy`
-- `*.npz`
-
-## Roadmap
-
-- Add real screenshot assets to `docs/screenshots/`.
-- Improve tNG estimator reporting.
-- Add f_NL constraint visualization.
-- Add batch comparison workflows.
-- Add authenticated projects and saved runs.
-- Add cloud storage and a production queue.
-- Add shareable result links.
-- Add PDF/LaTeX report generation.
-- Add broader validation on public Planck datasets.
+- `node_modules/` is ignored and should not be pushed to Git.
+- Large generated files such as `.zip`, `.fits`, `.npy`, and `.npz` are ignored.
+- Uploaded files and generated outputs are stored locally during development.
+- The frontend is tracked as normal source code inside this repository.
 
 ## License
 
