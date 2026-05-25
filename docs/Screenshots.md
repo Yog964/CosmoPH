@@ -68,3 +68,7 @@ The system generates analytical visualizations from prediction data.
 ![Overall Workflow](https://github.com/user-attachments/assets/b65dd3f7-f3a3-4522-b3de-5a4e457c6064)
 
 ---
+
+# thumbnail
+<img width="1024" height="572" alt="Thumbnail" src="https://github.com/user-attachments/assets/d3795b7b-7a3e-41aa-9cbe-69d8a4c308b7" />
+
