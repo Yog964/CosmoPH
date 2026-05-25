@@ -26,6 +26,40 @@ class PersistencePair(BaseModel):
     dimension: int
 
 
+class DefectBoundingBox(BaseModel):
+    """Bounding box for a localized cosmic defect."""
+    x_min: int
+    y_min: int
+    x_max: int
+    y_max: int
+    width: int
+    height: int
+    aspect_ratio: float
+
+
+class DefectDetection(BaseModel):
+    """A single detected cosmic defect with localization data."""
+    id: str
+    type: str = Field(..., description="Defect type: 'Cosmic String', 'Cosmic Texture', or 'Cosmic Monopole'")
+    dimension: int = Field(..., description="Homology dimension (0 or 1)")
+    persistence: float
+    birth: float
+    death: float
+    confidence: float = Field(..., ge=0, le=1, description="Confidence score 0-1")
+    bounding_box: DefectBoundingBox
+    center: dict = Field(..., description="Center point {row, col}")
+    n_generator_points: int
+    intensity_stats: dict = Field(..., description="Intensity statistics at defect location")
+    highlight_pixels: list[dict] = Field(default_factory=list, description="Contributing pixel coordinates")
+    description: str
+
+
+class DefectDetectionResult(BaseModel):
+    """Full result of cosmic defect detection."""
+    defects: list[DefectDetection] = Field(default_factory=list)
+    summary: dict = Field(default_factory=dict)
+
+
 class TDAResult(BaseModel):
     """Result of TDA computation."""
     job_id: str
@@ -65,6 +99,12 @@ class TDAResult(BaseModel):
     map_preview: Optional[list[list[float]]] = Field(
         None,
         description="Original CMB patch for visualization"
+    )
+
+    # Cosmic defect detections
+    defect_detections: Optional[DefectDetectionResult] = Field(
+        None,
+        description="Localized cosmic defect detections with bounding boxes"
     )
     
     message: str = "TDA computation completed"

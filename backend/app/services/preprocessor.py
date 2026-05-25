@@ -21,7 +21,7 @@ except ImportError:
     HEALPY_AVAILABLE = False
 
 
-def apply_galactic_mask(data: np.ndarray, mask: Optional[np.ndarray] = None) -> np.ndarray:
+def apply_map_mask(data: np.ndarray, mask: Optional[np.ndarray] = None, mask_type: str = "galactic") -> np.ndarray:
     """
     Apply galactic plane mask to a CMB map.
     
@@ -49,12 +49,23 @@ def apply_galactic_mask(data: np.ndarray, mask: Optional[np.ndarray] = None) -> 
                 resized_mask = zoom(mask.astype(float), zoom_factor, order=0)
                 result[resized_mask < 0.5] = np.nan
     else:
-        # Apply a simple galactic plane mask for 2D patches
+        # Apply a simple synthetic mask for 2D patches based on mask_type
         if data.ndim == 2:
             h, w = data.shape
-            center = h // 2
-            mask_width = max(1, h // 10)  # Mask 10% around center
-            result[center - mask_width:center + mask_width, :] = np.nan
+            if mask_type == "galactic":
+                center = h // 2
+                mask_width = max(1, h // 10)  # Mask 10% around center horizontal band
+                result[center - mask_width:center + mask_width, :] = np.nan
+            elif mask_type == "point_source":
+                # Apply randomly scattered circular holes (like point sources)
+                np.random.seed(42)  # Fixed seed for reproducibility so the mask is stable
+                n_sources = max(3, (h * w) // 200)
+                for _ in range(n_sources):
+                    cy, cx = np.random.randint(0, h), np.random.randint(0, w)
+                    r = max(1, h // 20)
+                    y, x = np.ogrid[-cy:h-cy, -cx:w-cx]
+                    region = x*x + y*y <= r*r
+                    result[region] = np.nan
     
     return result
 
@@ -213,7 +224,7 @@ def preprocess_pipeline(
     # Step 2: Apply mask
     mask_applied = False
     if apply_mask:
-        patch = apply_galactic_mask(patch, mask)
+        patch = apply_map_mask(patch, mask, mask_type)
         mask_applied = True
     
     # Step 3: Apply filter

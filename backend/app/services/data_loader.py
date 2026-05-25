@@ -136,7 +136,12 @@ def load_fits_map(filepath: str, field: int = 0) -> np.ndarray:
     elif ASTROPY_AVAILABLE:
         try:
             with astropy_fits.open(str(filepath)) as hdul:
-                data = hdul[1].data.field(field).astype(np.float64)
+                if len(hdul) > 1 and hasattr(hdul[1].data, 'field'):
+                    data = hdul[1].data.field(field).astype(np.float64)
+                elif len(hdul) > 1:
+                    data = hdul[1].data.astype(np.float64)
+                else:
+                    data = hdul[0].data.astype(np.float64)
                 return data
         except Exception as e:
             raise ValueError(f"Error loading FITS with astropy: {e}")

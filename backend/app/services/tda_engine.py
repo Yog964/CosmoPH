@@ -1,7 +1,7 @@
 """
 CosmoPH - TDA Engine Service
-Core Topological Data Analysis: persistence diagrams, Betti curves,
-persistence images, and Wasserstein distance comparison.
+# Core Topological Data Analysis: persistence diagrams, Betti curves,
+# persistence images, and Wasserstein distance comparison.
 """
 
 import numpy as np
@@ -23,7 +23,7 @@ except ImportError:
     print("⚠️  persim not available. Using simplified comparison.")
 
 
-def _subsample_points(data_2d: np.ndarray, max_points: int = 1000) -> np.ndarray:
+def _subsample_points(data_2d: np.ndarray, max_points: int = 1000) -> dict:
     """
     Convert a 2D image patch into a point cloud for TDA.
     Uses superlevel set filtration: points are (x, y, value) where value > threshold.
@@ -34,7 +34,7 @@ def _subsample_points(data_2d: np.ndarray, max_points: int = 1000) -> np.ndarray
         max_points: Maximum number of points
     
     Returns:
-        2D array of shape (n_points, 2) or (n_points, 3)
+        Dict with 'points' (n_points, 2), 'pixel_rows', 'pixel_cols', 'values'
     """
     h, w = data_2d.shape
     
@@ -55,8 +55,16 @@ def _subsample_points(data_2d: np.ndarray, max_points: int = 1000) -> np.ndarray
         prob = importance / importance.sum() if importance.sum() > 0 else np.ones(len(importance)) / len(importance)
         indices = np.random.choice(len(points), size=max_points, replace=False, p=prob)
         points = points[indices]
+        rows = rows[indices]
+        cols = cols[indices]
+        values = values[indices]
     
-    return points
+    return {
+        "points": points,
+        "pixel_rows": rows,
+        "pixel_cols": cols,
+        "values": values,
+    }
 
 
 def compute_persistence_diagram(
@@ -77,14 +85,17 @@ def compute_persistence_diagram(
         max_points: Maximum points to use
     
     Returns:
-        Dictionary with 'diagrams' (list of (birth, death, dim) tuples),
-        'raw_diagrams' (list of numpy arrays per dimension)
+        Dictionary with 'pairs', 'raw_diagrams', 'n_features',
+        'point_cloud_info' (pixel mapping for defect localization)
     """
-    points = _subsample_points(data_2d, max_points)
+    pc_info = _subsample_points(data_2d, max_points)
+    points = pc_info["points"]
     
+    cocycles = None
     if RIPSER_AVAILABLE:
-        result = ripser(points, maxdim=max_dimension, thresh=max_edge_length)
+        result = ripser(points, maxdim=max_dimension, thresh=max_edge_length, do_cocycles=True)
         diagrams = result['dgms']
+        cocycles = result.get('cocycles', None)
     else:
         # Simplified fallback: compute pairwise distances and extract features
         diagrams = _simplified_persistence(points, max_dimension)
@@ -104,6 +115,8 @@ def compute_persistence_diagram(
         "pairs": pairs,
         "raw_diagrams": [dgm[np.isfinite(dgm[:, 1])] if len(dgm) > 0 else np.array([]).reshape(0, 2) for dgm in diagrams],
         "n_features": {f"H{dim}": int(np.sum(np.isfinite(dgm[:, 1]))) if len(dgm) > 0 else 0 for dim, dgm in enumerate(diagrams)},
+        "point_cloud_info": pc_info,
+        "cocycles": cocycles,
     }
 
 
@@ -378,6 +391,22 @@ def run_tda_pipeline(
         preview = patch
     results["map_preview"] = preview.tolist()
     
+    # 7. Cosmic Defect Detection & Localization
+    try:
+        from app.services.defect_detector import detect_cosmic_defects
+        defect_results = detect_cosmic_defects(
+            patch=patch,
+            persistence_pairs=pd_result["pairs"],
+            raw_diagrams=pd_result["raw_diagrams"],
+            point_cloud_info=pd_result["point_cloud_info"],
+            cocycles=pd_result.get("cocycles"),
+            gaussian_comparison=results.get("gaussian_comparison"),
+        )
+        results["defect_detections"] = defect_results
+    except Exception as e:
+        print(f"⚠️  Defect detection failed (non-fatal): {e}")
+        results["defect_detections"] = {"defects": [], "summary": {"total_defects": 0, "error": str(e)}}
+    
     return results
 
 
@@ -440,12 +469,17 @@ def _compare_with_gaussian(
             "values": [float(v) for v in values],
         }
     
-    # Simple non-Gaussianity test: is the average Wasserstein distance significant?
+    # Simple non-Gaussianity test based on empirical Wasserstein distributions
     is_non_gaussian = {}
     for key, dist_info in avg_distances.items():
-        # If mean distance > 2*std, flag as potentially non-Gaussian
-        threshold = dist_info["std"] * 2 if dist_info["std"] > 0 else dist_info["mean"] * 0.5
-        is_non_gaussian[key] = dist_info["mean"] > threshold if threshold > 0 else False
+        if key == "H0":
+            # H0 distance increases for Non-Gaussian features
+            is_non_gaussian[key] = dist_info["mean"] > 0.5
+        elif key == "H1":
+            # H1 distance decreases for Non-Gaussian features
+            is_non_gaussian[key] = dist_info["mean"] < 0.65
+        else:
+            is_non_gaussian[key] = False
     
     return {
         "wasserstein_distances": avg_distances,
@@ -453,3 +487,4 @@ def _compare_with_gaussian(
         "n_gaussian_samples": n_samples,
         "gaussian_feature_counts": gaussian_feature_counts,
     }
+

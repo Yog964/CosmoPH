@@ -14,7 +14,7 @@ CosmoPH is an interactive, web-based platform that brings cutting-edge Topologic
 - **Betti Curves** — Track feature counts across filtration scales
 - **Persistence Images** — Vectorized topological summaries
 - **Gaussian Comparison** — Wasserstein distance against null hypothesis
-- **ML Classification** — Inflation model classification (scaffold for production)
+- **Topological Deep Learning** — Hybrid PyTorch architecture fusing raw CMB pixels (CNN) with 12 TDA features (MLP) for Inflation model classification.
 - **Export** — ZIP bundles with PNG plots, CSV data, JSON results
 - **One-Click Demo** — Full pipeline with synthetic data, no upload needed
 
@@ -27,7 +27,7 @@ Frontend (Next.js + Tailwind + Plotly)
     ↓ REST API
 Backend (FastAPI + Python)
     ↓ Processing
-Services (healpy + ripser + persim + scikit-learn)
+Services (healpy + ripser + persim + PyTorch)
     ↓ Storage
 Dataset Directory + Output Files
 ```
@@ -216,7 +216,7 @@ pytest tests/test_preprocess.py -v
 | Backend | FastAPI, Pydantic, Uvicorn |
 | TDA | Ripser, Persim, scikit-tda |
 | Astronomy | Healpy, Astropy |
-| ML | scikit-learn (scaffold) |
+| ML | PyTorch (Hybrid CNN + TDA) |
 | Queue | In-memory (MVP) → Celery + Redis (production) |
 | Testing | Pytest, Jest |
 | Deployment | Docker, Docker Compose |
@@ -226,7 +226,7 @@ pytest tests/test_preprocess.py -v
 ## 📈 Future Roadmap
 
 - [ ] tNG estimators (tNG₁, tNG₂, tNG₃)
-- [ ] Trained ML classifier on labeled simulations
+- [x] Trained ML classifier on labeled simulations (PyTorch Hybrid)
 - [ ] f_NL constraint visualization
 - [ ] Full-sky HEALPix support with HPC offload
 - [ ] User authentication (OAuth)

@@ -18,6 +18,7 @@ node_modules/
 # Datasets and Uploads
 uploads/
 dataset/raw/
+*.zip
 *.fits
 *.npy
 *.npz

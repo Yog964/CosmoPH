@@ -1,6 +1,6 @@
 """Test preprocessing service."""
 import numpy as np
-from app.services.preprocessor import preprocess_pipeline, normalize_patch, apply_galactic_mask
+from app.services.preprocessor import preprocess_pipeline, normalize_patch, apply_map_mask
 
 def test_normalize_zscore():
     data = np.random.normal(5, 2, (64, 64))
@@ -16,5 +16,5 @@ def test_preprocess_pipeline():
 
 def test_mask():
     data = np.ones((64, 64))
-    masked = apply_galactic_mask(data)
+    masked = apply_map_mask(data)
     assert np.any(np.isnan(masked))
