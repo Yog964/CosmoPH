@@ -22,7 +22,16 @@ Users upload textile fabric datasets/images for inspection.
 
 ---
 
-# 3. Defect Detection
+# 3. Results Dashboard
+
+Displays the fits files
+
+## Screenshot
+
+![Results](https://github.com/user-attachments/assets/4d682974-5dd9-4c67-986e-b5cc5c4bafbf)
+
+---
+# 4. Defect Detection
 
 The system scans uploaded textile images to identify defects.
 
@@ -32,7 +41,7 @@ The system scans uploaded textile images to identify defects.
 
 ---
 
-# 4. Anomaly Classification
+# 5. Anomaly Classification
 
 Detected defects are classified into specific categories.
 
@@ -42,7 +51,7 @@ Detected defects are classified into specific categories.
 
 ---
 
-# 5. Graphs & Analytics
+# 6. Graphs & Analytics
 
 The system generates analytical visualizations from prediction data.
 
@@ -52,15 +61,7 @@ The system generates analytical visualizations from prediction data.
 
 ---
 
-# 6. Final Results Dashboard
 
-Displays the final prediction and defect analysis summary.
-
-## Screenshot
-
-![Results](https://github.com/user-attachments/assets/4d682974-5dd9-4c67-986e-b5cc5c4bafbf)
-
----
 
 # Overall Architecture Flow
 
